@@ -1,0 +1,4 @@
+(library
+ (name aoc24)
+ (libraries angstrom batteries))
+
