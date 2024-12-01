@@ -1,0 +1,28 @@
+opam-version: "2.0"
+synopsis: "Ocaml solution to AoC 2024"
+description: ""
+maintainer: ["Nicholas Schwab"]
+authors: ["Nicholas Schwab"]
+license: "LICENSE"
+tags: ["aoc"]
+homepage: "https://github.com/Nicholas42/aoc24"
+depends: [
+  "ocaml"
+  "dune" {>= "3.16"}
+  "odoc" {with-doc}
+]
+build: [
+  ["dune" "subst"] {dev}
+  [
+    "dune"
+    "build"
+    "-p"
+    name
+    "-j"
+    jobs
+    "@install"
+    "@runtest" {with-test}
+    "@doc" {with-doc}
+  ]
+]
+dev-repo: "git+https://github.com/Nicholas42/aoc24"

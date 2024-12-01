@@ -1,0 +1,9 @@
+# secret
+aoc_cookie.txt
+
+# generated
+inputs/
+
+# ocaml
+_build
+_opam
