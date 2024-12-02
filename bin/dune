@@ -2,3 +2,8 @@
  (public_name dec01)
  (name dec01)
  (libraries aoc24))
+
+(executable
+ (public_name dec02)
+ (name dec02)
+ (libraries aoc24))
