@@ -4,46 +4,41 @@ type monotony = Increasing | Decreasing | Indetermined
 
 let line_parser = Angstrom.many (integer <* whitespace)
 
-let parse_line line =
-  match parse_string ~consume:Prefix line_parser line with
-  | Ok l -> l
-  | Error msg -> failwith msg
-
 let rec check_list monotony list =
   match list with
   | [] -> true
-  | head :: sec :: tail ->
-      if head == sec then false
-      else if monotony == Increasing && head > sec then false
-      else if monotony == Decreasing && head < sec then false
-      else if abs (sec - head) > 3 then false
-      else
-        check_list (if head > sec then Decreasing else Increasing) (sec :: tail)
+  | head :: (twilek :: _ as tail) -> (
+      match (BatInt.ord twilek head, monotony) with
+      | Eq, _ -> false
+      | Gt, Decreasing -> false
+      | Lt, Increasing -> false
+      | _ when dist twilek head > 3 -> false
+      | Gt, _ -> check_list Increasing tail
+      | Lt, _ -> check_list Decreasing tail)
   | _ -> true
 
-let rec iterate_lenient heads tails =
-  match tails with
+let rec iterate_lenient heads = function
   | twilek :: rest ->
       if check_list Indetermined (heads @ rest) then true
-      else iterate_lenient (heads @ [ twilek ]) rest
+      else iterate_lenient (back_cons heads twilek) rest
   | [] -> false
 
 let check_lenient list =
   if check_list Indetermined list then true else iterate_lenient [] list
 
 let part1 input =
-  input |> Enum.map parse_line
-  |> Enum.map @@ check_list Indetermined
-  |> BatEnum.filter identity |> BatEnum.hard_count
+  input
+  |> List.map @@ parse_all line_parser
+  |> List.map @@ check_list Indetermined
+  |> List.count_matching identity
 
 let part2 input =
-  input |> Enum.map parse_line |> Enum.map check_lenient
-  |> BatEnum.filter identity |> BatEnum.hard_count
-(* Enum.map parse_line line |> BatList.of_enum |> print_list *)
+  input
+  |> List.map @@ parse_all line_parser
+  |> List.map check_lenient
+  |> List.count_matching identity
 
 let () =
-  let in1, in2 = get_input_twice in
-  part1 in1 |> print_int;
-  print_endline "";
-  part2 in2 |> print_int;
-  print_endline ""
+  let input = get_input in
+  part1 input |> print_anything;
+  part2 input |> print_anything
