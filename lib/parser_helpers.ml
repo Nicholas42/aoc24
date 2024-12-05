@@ -18,8 +18,7 @@ let digit = satisfy is_digit >>| String.make 1 >>| int_of_string
 let integer = take_while1 is_digit >>| int_of_string
 
 let extract_all parser =
-  many (parser >>| (fun x -> Some x) <|> any_char *> return None) >>| fun x ->
-  filter_some x
+  many (parser >>| (fun x -> Some x) <|> any_char *> return None) >>| CCList.keep_some
 
 let ( &> ) = both
 

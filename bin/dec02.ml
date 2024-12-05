@@ -28,15 +28,15 @@ let check_lenient list =
 
 let part1 input =
   input
-  |> List.map @@ parse_all line_parser
-  |> List.map @@ check_list Indetermined
-  |> List.count_matching identity
+  |> CCList.map @@ parse_all line_parser
+  |> CCList.map @@ check_list Indetermined
+  |> CCList.count CCFun.id
 
 let part2 input =
   input
-  |> List.map @@ parse_all line_parser
-  |> List.map check_lenient
-  |> List.count_matching identity
+  |> CCList.map @@ parse_all line_parser
+  |> CCList.map check_lenient
+  |> CCList.count CCFun.id
 
 let () =
   let input = get_input in

@@ -5,16 +5,16 @@ let line_parser = integer <* whitespace &> integer
 let part1 input =
   List.map (parse_all line_parser) input
   |> List.split
-  |> BatTuple.Tuple2.mapn @@ List.sort compare
-  |> uncurry @@ List.map2 dist
-  |> List.sum
+  |> CCPair.map_same @@ List.sort compare
+  |> CCFun.uncurry @@ CCList.map2 dist
+  |> sum
 
 let sim_score comp_list reference =
-  reference * BatList.count_matching (( = ) reference) comp_list
+  reference * CCList.count (( = ) reference) comp_list
 
 let part2 input =
   List.map (parse_all line_parser) input |> List.split |> fun (lhs, rhs) ->
-  List.map (sim_score rhs) lhs |> List.sum
+  List.map (sim_score rhs) lhs |> sum
 
 let () =
   let input = get_input in

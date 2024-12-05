@@ -5,7 +5,7 @@ type instruction = Mul of int | Do | Dont
 let mul_parser =
   string "mul(" *> integer
   &> string "," *> integer
-  <* string ")" >>| uncurry ( * )
+  <* string ")" >>| CCFun.uncurry ( * )
 
 let parse_line parser line = parse_all (extract_all parser) line
 
@@ -24,10 +24,10 @@ let rec enabled_sum ?(acc = 0) ?(enabled = true) l =
       enabled_sum ~acc:(acc + if enabled then value else 0) ~enabled rest
 
 let part1 (input : string list) =
-  List.map (parse_line mul_parser) input |> List.flatten |> List.sum
+  CCList.map (parse_line mul_parser) input |> CCList.flatten |> sum
 
 let part2 input =
-  List.map (parse_line instruction_parser) input |> List.flatten |> enabled_sum
+  CCList.map (parse_line instruction_parser) input |> CCList.flatten |> enabled_sum
 
 let () =
   let input = get_input in
