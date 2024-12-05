@@ -17,3 +17,8 @@
  (public_name dec04)
  (name dec04)
  (libraries aoc24))
+
+(executable
+ (public_name dec05)
+ (name dec05)
+ (libraries aoc24))
