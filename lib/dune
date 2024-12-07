@@ -1,4 +1,4 @@
 (library
  (name aoc24)
- (libraries angstrom batteries containers))
+ (libraries angstrom batteries containers zarith))
 
