@@ -2,6 +2,10 @@ DUNE=opam exec -- dune
 days=$(patsubst bin/%.ml,%,$(wildcard bin/dec*))
 day_targets=$(sort $(filter dec%,$(MAKECMDGOALS)) $(days))
 
+.PHONY: today
+today:
+	$(MAKE) $(shell date +"dec%d")
+
 .PHONY: all
 all: $(days)
 
