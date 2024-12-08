@@ -15,21 +15,26 @@ let instruction_parser =
   <|> string "do()" *> return Do
   <|> string "don't()" *> return Dont
 
-let rec enabled_sum ?(acc = 0) ?(enabled = true) l =
-  match l with
-  | [] -> acc
-  | Do :: rest -> enabled_sum ~acc ~enabled:true rest
-  | Dont :: rest -> enabled_sum ~acc ~enabled:false rest
-  | Mul value :: rest ->
-      enabled_sum ~acc:(acc + if enabled then value else 0) ~enabled rest
+let enabled_sum l =
+  CCList.fold_left
+    (fun (acc, enabled) inst ->
+      match inst with
+      | Do -> (acc, true)
+      | Dont -> (acc, false)
+      | Mul value -> ((acc + if enabled then value else 0), enabled))
+    (0, true) l
+  |> fst
 
 let part1 (input : string list) =
   CCList.map (parse_line mul_parser) input |> CCList.flatten |> sum
 
 let part2 input =
-  CCList.map (parse_line instruction_parser) input |> CCList.flatten |> enabled_sum
+  CCList.map (parse_line instruction_parser) input
+  |> CCList.flatten |> enabled_sum
 
 let () =
   let input = get_input () in
-  part1 input |> print_anything;
-  part2 input |> print_anything
+  part1 input |> print_int;
+  print_newline ();
+  part2 input |> print_int;
+  print_newline ()

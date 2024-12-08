@@ -22,6 +22,7 @@ module type PositionInterface = sig
   val to_float : t -> float gen_position
   val to_int : t -> int gen_position
   val to_z : t -> Z.t gen_position
+  val from_pair : number_type * number_type -> t
 
   val in_rec :
     ?lower_bound_x:number_type ->
@@ -43,6 +44,7 @@ struct
   let to_int { x; y } = { x = N.to_int x; y = N.to_int y }
   let to_float { x; y } = { x = N.to_float x; y = N.to_float y }
   let to_z { x; y } = { x = N.to_z x; y = N.to_z y }
+  let from_pair (x, y) = { x; y }
 
   let in_rec ?(lower_bound_x = N.zero) ?(lower_bound_y = N.zero) upper_bound_x
       upper_bound_y { x; y } =

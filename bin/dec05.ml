@@ -1,4 +1,5 @@
 open Aoc24
+open CCFun.Infix
 
 let parse_order_rule = integer <* string "|" &> integer
 let parse_update = extract_all integer
@@ -13,9 +14,7 @@ let rec is_correct_single rules page = function
 
 let rec is_correct rules = function
   | [] -> true
-  | hd :: tl ->
-      if not @@ is_correct_single rules hd tl then false
-      else is_correct rules tl
+  | hd :: tl -> is_correct_single rules hd tl && is_correct rules tl
 
 let parse_input lines =
   let rules, updates = CCList.take_drop_while (fun x -> x <> "") lines in
@@ -40,8 +39,8 @@ let part1 input =
 let part2 input =
   let rules, updates = parse_input input in
   CCList.filter (CCFun.negate @@ is_correct rules) updates
-  |> CCList.map (CCList.sort (order_func rules))
-  |> CCList.map get_middle |> sum
+  |> CCList.map (get_middle % CCList.sort (order_func rules))
+  |> sum
 
 let () =
   let input = get_input () in

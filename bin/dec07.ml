@@ -1,12 +1,12 @@
 open Aoc24
 
-type equation = { result : Z.t; args : Z.t list }
+type equation = { result : int; args : int list }
 
 let read_equation =
-  integerZ <* string ": " &> extract_all integerZ >>| fun (res, args) ->
+  integer <* string ": " &> extract_all integer >>| fun (res, args) ->
   { result = res; args }
 
-let combine lhs rhs = Z.of_string (Z.to_string lhs ^ Z.to_string rhs)
+let combine lhs rhs = int_of_string (Int.to_string lhs ^ Int.to_string rhs)
 
 let read_all input =
   CCList.map
@@ -16,11 +16,11 @@ let read_all input =
       | Error msg -> failwith msg)
     input
 
-let rec try_eval interim_result { result : Z.t; args : Z.t list } ops =
+let rec try_eval interim_result { result; args } ops =
   if interim_result > Some result then false
   else
     match args with
-    | [] -> CCOption.get_or ~default:Z.zero interim_result = result
+    | [] -> CCOption.get_or ~default:0 interim_result = result
     | hd :: tl -> (
         let next_eq = { result; args = tl } in
         match interim_result with
@@ -34,15 +34,16 @@ let sum_valid equations ops =
   CCList.filter
     (fun eq -> try_eval None { result = eq.result; args = eq.args } ops)
     equations
-  |> CCList.fold_left (fun acc eq -> Z.add acc eq.result) Z.zero
+  |> CCList.map (fun eq -> eq.result)
+  |> sum
 
-let part1 equations = sum_valid equations [ Z.add; Z.mul ]
-let part2 equations = sum_valid equations [ Z.add; Z.mul; combine ]
+let part1 equations = sum_valid equations [ ( + ); ( * ) ]
+let part2 equations = sum_valid equations [ ( + ); ( * ); combine ]
 
 let () =
   let input = get_input () in
   let equations = read_all input in
-  part1 equations |> Z.print;
+  part1 equations |> print_int;
   print_newline ();
-  part2 equations |> Z.print;
+  part2 equations |> print_int;
   print_newline ()

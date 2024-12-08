@@ -18,5 +18,7 @@ let part2 input =
 
 let () =
   let input = get_input () in
-  part1 input |> print_anything;
-  part2 input |> print_anything
+  part1 input |> print_int;
+  print_newline ();
+  part2 input |> print_int;
+  print_newline ()

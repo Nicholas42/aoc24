@@ -2,7 +2,7 @@ open Aoc24
 
 type monotony = Increasing | Decreasing | Indetermined
 
-let line_parser = Angstrom.many (integer <* whitespace)
+let line_parser = extract_all integer
 
 let rec check_list monotony list =
   match list with
@@ -29,16 +29,14 @@ let check_lenient list =
 let part1 input =
   input
   |> CCList.map @@ parse_all line_parser
-  |> CCList.map @@ check_list Indetermined
-  |> CCList.count CCFun.id
+  |> CCList.count @@ check_list Indetermined
 
 let part2 input =
-  input
-  |> CCList.map @@ parse_all line_parser
-  |> CCList.map check_lenient
-  |> CCList.count CCFun.id
+  input |> CCList.map @@ parse_all line_parser |> CCList.count check_lenient
 
 let () =
   let input = get_input () in
-  part1 input |> print_anything;
-  part2 input |> print_anything
+  part1 input |> print_int;
+  print_newline ();
+  part2 input |> print_int;
+  print_newline ();
