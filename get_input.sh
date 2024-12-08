@@ -22,11 +22,5 @@ EOF
 fi
 
 if ! grep -q "dec$DAY" bin/dune; then
-    cat <<EOF >>"bin/dune"
-
-(executable
- (public_name dec$DAY)
- (name dec$DAY)
- (libraries aoc24))
-EOF
+    sed -i -e "s/\\(public_names.*\\))/\\1 dec$DAY)/" bin/dune
 fi
