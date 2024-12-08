@@ -59,7 +59,5 @@ let () =
       ~eq:(fun a b -> a.frequency == b.frequency)
       antennae
   in
-  part1 grouped width height |> print_int;
-  print_newline ();
-  part2 grouped width height |> print_int;
-  print_newline ()
+  part1 grouped width height |> print_int_nl;
+  part2 grouped width height |> print_int_nl

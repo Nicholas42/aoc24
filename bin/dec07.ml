@@ -43,7 +43,5 @@ let part2 equations = sum_valid equations [ ( + ); ( * ); combine ]
 let () =
   let input = get_input () in
   let equations = read_all input in
-  part1 equations |> print_int;
-  print_newline ();
-  part2 equations |> print_int;
-  print_newline ()
+  part1 equations |> print_int_nl;
+  part2 equations |> print_int_nl

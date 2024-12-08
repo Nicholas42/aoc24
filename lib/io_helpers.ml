@@ -6,6 +6,10 @@ let print_anything a =
 
 let get_input () = CCIO.(with_in Sys.argv.(1) read_lines_l)
 
+let print_int_nl x =
+  print_int x;
+  print_newline ()
+
 let fold_input (func : 'a -> position -> char -> 'a) (init : 'a)
     (input : string list) : 'a =
   CCList.foldi

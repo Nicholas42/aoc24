@@ -44,5 +44,5 @@ let part2 input =
 
 let () =
   let input = get_input () in
-  part1 input |> print_int |> print_newline;
-  part2 input |> print_int |> print_newline
+  part1 input |> print_int_nl;
+  part2 input |> print_int_nl

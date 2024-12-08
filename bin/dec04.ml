@@ -49,7 +49,5 @@ let part2 (input : char Matrix.t) =
 
 let () =
   let input = get_input () |> Matrix.from_input in
-  part1 input |> print_int;
-  print_newline ();
-  part2 input |> print_int;
-  print_newline ()
+  part1 input |> print_int_nl;
+  part2 input |> print_int_nl

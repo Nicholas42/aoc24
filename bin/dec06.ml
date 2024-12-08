@@ -81,7 +81,5 @@ let () =
   let input = get_input () in
   let field = Matrix.from_input input in
   let guard = find_guard field in
-  part1 field guard |> print_int;
-  print_newline ();
-  part2 field guard |> print_int;
-  print_newline ()
+  part1 field guard |> print_int_nl;
+  part2 field guard |> print_int_nl
