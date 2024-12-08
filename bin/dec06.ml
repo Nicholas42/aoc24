@@ -1,6 +1,5 @@
 open Aoc24
 
-type position = Matrix.position
 type direction = Up | Right | Down | Left
 type guard = { pos : position; facing : direction }
 

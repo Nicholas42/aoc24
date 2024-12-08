@@ -1,34 +1,26 @@
 open Aoc24
 open CCSeq.Infix
+open IntPosition
 
-type position = Matrix.position
 type antenna = { frequency : char; pos : position }
 
 let find_antennae input =
-  CCList.foldi
-    (fun init y row ->
-      CCString.foldi
-        (fun sofar x c ->
-          if c <> '.' then { frequency = c; pos = { x; y } } :: sofar else sofar)
-        init row)
+  fold_input
+    (fun sofar pos c ->
+      if c <> '.' then { frequency = c; pos } :: sofar else sofar)
     [] input
 
 let nodes_for a b : position list =
-  let diff_x = a.pos.x - b.pos.x in
-  let diff_y = a.pos.y - b.pos.y in
-  [
-    { x = a.pos.x + diff_x; y = a.pos.y + diff_y };
-    { x = b.pos.x - diff_x; y = b.pos.y - diff_y };
-  ]
+  let inc = diff a.pos b.pos in
+  [ add a.pos inc; diff b.pos inc ]
 
 let calc_in_line_x a b width y : position list =
   if a.pos.y = b.pos.y && a.pos.y = y then
     0 --^ width |> CCSeq.map (fun x : position -> { x; y }) |> CCList.of_seq
   else
-    let diff_x = float_of_int @@ (a.pos.x - b.pos.x) in
-    let diff_y = float_of_int @@ (a.pos.y - b.pos.y) in
-    let factor = float_of_int (y - a.pos.y) /. diff_y in
-    let expected_x = (diff_x *. factor) +. float_of_int a.pos.x in
+    let inc = to_float (diff a.pos b.pos) in
+    let factor = float_of_int (y - a.pos.y) /. inc.y in
+    let expected_x = (inc.x *. factor) +. float_of_int a.pos.x in
     if Float.is_integer expected_x then [ { x = int_of_float expected_x; y } ]
     else []
 

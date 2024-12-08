@@ -1,6 +1,7 @@
+open Position
+
 module Matrix : sig
   type 'a t = 'a array array
-  type position = { x : int; y : int }
 
   val get_opt : 'a t -> position -> 'a option
   val get_exn : 'a t -> position -> 'a
@@ -22,7 +23,6 @@ module Matrix : sig
   val print : ('a -> unit) -> 'a t -> unit
 end = struct
   type 'a t = 'a array array
-  type position = { x : int; y : int }
 
   let height mat = CCArray.length mat
   let width mat = if height mat = 0 then 0 else CCArray.length mat.(0)

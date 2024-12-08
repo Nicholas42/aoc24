@@ -15,8 +15,6 @@ $(day_targets): dec%: inputs/dec%.txt
 ifeq ($(is_silent),)
 	$(info Computing solutions for $@)
 endif
-
-	$(DUNE) build
 	$(DUNE) exec $@ -- $<
 
 .PHONY: check
