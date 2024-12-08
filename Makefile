@@ -21,6 +21,14 @@ endif
 check:
 	./run_check.sh
 
+.PHONY: time
+time: build
+	$(foreach day,$(days),time $(MAKE) $(day);)
+
+
+.PHONY: build
+build:
+	$(DUNE) build
 
 inputs/dec%.txt:
 	echo $@ | grep -oP '\d\d' | xargs ./get_input.sh > /dev/null
