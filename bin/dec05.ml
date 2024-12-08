@@ -44,6 +44,6 @@ let part2 input =
   |> CCList.map get_middle |> sum
 
 let () =
-  let input = get_input in
+  let input = get_input () in
   part1 input |> print_int |> print_newline;
   part2 input |> print_int |> print_newline

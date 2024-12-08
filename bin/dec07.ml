@@ -40,7 +40,7 @@ let part1 equations = sum_valid equations [ Z.add; Z.mul ]
 let part2 equations = sum_valid equations [ Z.add; Z.mul; combine ]
 
 let () =
-  let input = get_input in
+  let input = get_input () in
   let equations = read_all input in
   part1 equations |> Z.print;
   print_newline ();

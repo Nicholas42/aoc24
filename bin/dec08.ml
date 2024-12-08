@@ -58,7 +58,7 @@ let part2 grouped width height =
   |> filter_valid width height
 
 let () =
-  let input = get_input in
+  let input = get_input () in
   let antennae = find_antennae input in
   let width = CCList.hd input |> CCString.length in
   let height = CCList.length input in

@@ -79,7 +79,7 @@ let part2 field guard =
   Matrix.count_pos (fun pos _ -> has_loop_with field guard pos) field
 
 let () =
-  let input = get_input in
+  let input = get_input () in
   let field = Matrix.from_input input in
   let guard = find_guard field in
   part1 field guard |> print_int;

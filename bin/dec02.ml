@@ -39,6 +39,6 @@ let part2 input =
   |> CCList.count CCFun.id
 
 let () =
-  let input = get_input in
+  let input = get_input () in
   part1 input |> print_anything;
   part2 input |> print_anything

@@ -58,6 +58,6 @@ let part2 input =
   |> CCSeq.filter CCFun.id |> CCSeq.length
 
 let () =
-  let input = get_input |> Array.of_list in
+  let input = get_input () |> Array.of_list in
   part1 input |> print_anything;
   part2 input |> print_anything

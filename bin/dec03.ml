@@ -30,6 +30,6 @@ let part2 input =
   CCList.map (parse_line instruction_parser) input |> CCList.flatten |> enabled_sum
 
 let () =
-  let input = get_input in
+  let input = get_input () in
   part1 input |> print_anything;
   part2 input |> print_anything
