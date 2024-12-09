@@ -5,22 +5,20 @@
 (generate_opam_files true)
 
 (source
- (github username/reponame))
+ (github Nicholas42/aoc24))
 
-(authors "Author Name")
+(authors "Nicholas Schwab")
 
 (maintainers "Maintainer Name")
 
-(license LICENSE)
-
-(documentation https://url/to/documentation)
+(license GPL-3.0-or-later)
 
 (package
  (name aoc24)
- (synopsis "A short synopsis")
- (description "A longer description")
- (depends ocaml dune)
+ (synopsis "Solving aoc24")
+ (description "Learning ocaml by solving the Advent of Code 2024")
+ (depends ocaml dune angstrom batteries containers containers-data zarith)
  (tags
-  (topics "to describe" your project)))
+  (topics "advent of code")))
 
 ; See the complete stanza docs at https://dune.readthedocs.io/en/stable/reference/dune-project/index.html

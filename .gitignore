@@ -5,5 +5,6 @@ aoc_cookie.txt
 inputs/
 
 # ocaml
+dune.lock
 _build
 _opam
