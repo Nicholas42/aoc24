@@ -5,6 +5,7 @@ module type NumberType = sig
   val sub : t -> t -> t
   val abs : t -> t
   val zero : t
+  val one : t
   val to_float : t -> float
   val to_int : t -> int
   val to_z : t -> Z.t
@@ -23,6 +24,8 @@ module type PositionInterface = sig
   val to_int : t -> int gen_position
   val to_z : t -> Z.t gen_position
   val from_pair : number_type * number_type -> t
+  val orthogonal_neighbors : t -> t list
+  val diagonal_neighbors : t -> t list
 
   val in_rec :
     ?lower_bound_x:number_type ->
@@ -45,6 +48,22 @@ struct
   let to_float { x; y } = { x = N.to_float x; y = N.to_float y }
   let to_z { x; y } = { x = N.to_z x; y = N.to_z y }
   let from_pair (x, y) = { x; y }
+
+  let orthogonal_neighbors { x; y } =
+    [
+      { x = x + N.one; y };
+      { x = x - N.one; y };
+      { x; y = y + N.one };
+      { x; y = y - N.one };
+    ]
+
+  let diagonal_neighbors { x; y } =
+    [
+      { x = x + N.one; y = y + N.one };
+      { x = x - N.one; y = y + N.one };
+      { x = x + N.one; y = y - N.one };
+      { x = x - N.one; y = y - N.one };
+    ]
 
   let in_rec ?(lower_bound_x = N.zero) ?(lower_bound_y = N.zero) upper_bound_x
       upper_bound_y { x; y } =

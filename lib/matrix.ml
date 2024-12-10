@@ -21,6 +21,7 @@ module Matrix : sig
   val find_pos : ('a -> bool) -> 'a t -> (position * 'a) option
   val count_pos : (position -> 'a -> bool) -> 'a t -> int
   val print : ('a -> unit) -> 'a t -> unit
+  val fold_pos : ('b -> position -> 'a -> 'b) -> 'b -> 'a t -> 'b
 end = struct
   type 'a t = 'a array array
 
@@ -79,4 +80,10 @@ end = struct
         CCArray.fold (fun _ c -> printer c) () row;
         print_newline ())
       () mat
+
+  let fold_pos f init m =
+    CCArray.foldi
+      (fun row_acc y row ->
+        CCArray.foldi (fun acc x v -> f acc { x; y } v) row_acc row)
+      init m
 end

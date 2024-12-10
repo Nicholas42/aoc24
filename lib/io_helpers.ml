@@ -4,6 +4,8 @@ let print_anything a =
   print_string @@ BatPervasives.dump a;
   print_newline ()
 
+let digit_of_char c = int_of_char c - int_of_char '0'
+
 let get_input () = CCIO.(with_in Sys.argv.(1) read_lines_l)
 
 let print_int_nl x =

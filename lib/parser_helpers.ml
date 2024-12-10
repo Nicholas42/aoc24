@@ -14,7 +14,7 @@ let string_peek expected =
   if actual = expected then advance 1 *> return (Some expected)
   else fail @@ Printf.sprintf "Expected string '%s', found '%s'" expected actual
 
-let digit = satisfy is_digit >>| String.make 1 >>| int_of_string
+let digit = satisfy is_digit >>| Io_helpers.digit_of_char
 let integer = take_while1 is_digit >>| int_of_string
 let integerZ = take_while1 is_digit >>| Z.of_string
 
