@@ -1,4 +1,4 @@
-let filter_some l = CCList.filter_map  l
+let filter_some l = CCList.filter_map l
 let back_cons l e = l @ [ e ]
 
 module String = struct
@@ -18,3 +18,8 @@ module Array = struct
 end
 
 let sum = CCList.fold_left ( + ) 0
+
+let group_on f l =
+  let f_hash x = Hashtbl.hash (f x) in
+  let f_eq lhs rhs = f lhs = f rhs in
+  CCList.group_by ~hash:f_hash ~eq:f_eq l

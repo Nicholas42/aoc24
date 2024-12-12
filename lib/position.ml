@@ -94,3 +94,6 @@ end)
 type position = int gen_position
 type fPosition = float gen_position
 type zPosition = Z.t gen_position
+
+let get_x { x; _ } = x
+let get_y { y; _ } = y
