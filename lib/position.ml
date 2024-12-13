@@ -91,9 +91,16 @@ module ZPosition = MakePosition (struct
   let to_z = CCFun.id
 end)
 
+module QPosition = MakePosition (struct
+  include Q
+
+  let to_z x = Q.to_int x |> Z.of_int
+end)
+
 type position = int gen_position
 type fPosition = float gen_position
 type zPosition = Z.t gen_position
+type qPosition = Q.t gen_position
 
 let get_x { x; _ } = x
 let get_y { y; _ } = y
