@@ -45,8 +45,8 @@ end = struct
 
   let set_exn mat { x; y } = set_2d_exn mat x y
   let set_safe mat { x; y } = set_2d_safe mat x y
-  let make = CCArray.make_matrix
-  let init = CCArray.init_matrix
+  let make width height v = CCArray.make_matrix height width v
+  let init width height f = CCArray.init_matrix height width f
   let map f mat = CCArray.(map (fun row -> map f row) mat)
 
   let mapi f mat =
