@@ -3,7 +3,8 @@
 : "${AOC_YEAR:=2024}"
 
 get_result() {
-    day_unpadded="${1#dec0*}"
+	day_no_dec="${1#dec*}"
+	day_unpadded="${day_no_dec#0*}"
 	curl --silent --show-error --fail --cookie aoc_cookie.txt "https://adventofcode.com/$AOC_YEAR/day/$day_unpadded" | grep -oP '<p>Your puzzle answer was <code>\d*</code>' | grep -oP '\d*'
 }
 
