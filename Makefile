@@ -1,6 +1,7 @@
 DUNE=opam exec -- dune
 days=$(patsubst bin/%.ml,%,$(wildcard bin/dec*))
 day_targets=$(sort $(filter dec%,$(MAKECMDGOALS)) $(days))
+time_targets=$(patsubst dec%,time_dec%,$(days))
 is_silent=$(findstring s,$(firstword -$(MAKEFLAGS)))
 
 .PHONY: today
@@ -23,7 +24,11 @@ check:
 
 .PHONY: time
 time: build
-	$(foreach day,$(days),time $(MAKE) $(day);)
+	$(MAKE) $(time_targets)
+
+.PHONY: $(time_targets)
+$(time_targets): time_dec%: build
+	time $(MAKE) $(patsubst time_dec%,dec%,$@)
 
 
 .PHONY: build
