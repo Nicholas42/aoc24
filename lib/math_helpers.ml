@@ -33,3 +33,5 @@ let rec pow base exp =
       let half_pow = pow base (exp / 2) in
       half_pow * half_pow
   | _ -> base * pow base (exp - 1)
+
+let ( % ) x y = ((x mod y) + y ) mod y

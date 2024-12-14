@@ -75,11 +75,11 @@ end = struct
       0 mat
 
   let print printer mat =
-    CCArray.fold
-      (fun _ row ->
-        CCArray.fold (fun _ c -> printer c) () row;
+    CCArray.iter
+      (fun row ->
+        CCArray.iter printer row;
         print_newline ())
-      () mat
+      mat
 
   let fold_pos f init m =
     CCArray.foldi
