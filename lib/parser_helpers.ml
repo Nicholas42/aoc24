@@ -15,8 +15,8 @@ let string_peek expected =
   else fail @@ Printf.sprintf "Expected string '%s', found '%s'" expected actual
 
 let digit = satisfy is_digit >>| Io_helpers.digit_of_char
-let integer = take_while1 is_digit >>| int_of_string
-let integerZ = take_while1 is_digit >>| Z.of_string
+let integer = both (option 1 ( char '-' *> return ~-1)) (take_while1 is_digit) >>| (fun (sign, num_str) -> sign * int_of_string num_str)
+let integerZ = integer >>| Z.of_int
 
 let extract_all parser =
   many (parser >>| (fun x -> Some x) <|> any_char *> return None) >>| CCList.keep_some
