@@ -2,6 +2,13 @@ open Aoc24
 
 type robot = { p : position; v : position }
 
+module PositionSet = CCHashSet.Make (struct
+  type t = position
+
+  let equal = ( = )
+  let hash = CCHash.poly
+end)
+
 let width = 101
 let height = 103
 
@@ -25,45 +32,28 @@ let get_quadrant { p; _ } =
   | Gt, Lt -> Some 2
   | Gt, Gt -> Some 3
 
+let make_robot_graph positionSet =
+  CCGraph.make (fun p ->
+      IntPosition.orthogonal_neighbors p
+      |> CCList.filter (fun n -> PositionSet.mem positionSet n)
+      |> CCList.map (fun n -> ((p, n), n))
+      |> CCList.to_iter)
+
+let find_components robots =
+  let tbl = CCGraph.mk_table ~eq:( = ) (CCList.length robots) in
+  let positions = CCList.map (fun r -> r.p) robots in
+  let graph = positions |> PositionSet.of_list |> make_robot_graph in
+  CCGraph.scc ~tbl ~graph (CCList.to_iter positions)
+
 let make_robot_matrix robots =
   let m = Matrix.make width height false in
   CCList.iter (fun { p; _ } -> Matrix.set_exn m p true) robots;
   m
 
-let rec set_all_connected (robots : bool Matrix.t) (islands : int Matrix.t)
-    island start =
-  if Matrix.get_opt robots start = Some true && Matrix.get_exn islands start = 0
-  then (
-    Matrix.set_exn islands start island;
-    IntPosition.orthogonal_neighbors start
-    |> CCList.iter (set_all_connected robots islands island))
-  else ()
-
-let mark_islands (robots : bool Matrix.t) (islands : int Matrix.t)
-    last_island_number pos is_robot =
-  match is_robot with
-  | false -> last_island_number
-  | true when Matrix.get_exn islands pos <> 0 -> last_island_number
-  | _ ->
-      set_all_connected robots islands (last_island_number + 1) pos;
-      last_island_number + 1
-
-let find_biggest_marked islands =
-  let max_num = Matrix.fold_pos (fun sofar _ v -> max sofar v) 0 islands in
-  let counts = CCArray.make (max_num + 1) 0 in
-  Matrix.fold_pos
-    (fun () _ v -> if v > 0 then counts.(v) <- counts.(v) + 1)
-    () islands;
-  CCArray.max_exn compare counts
-
 let find_biggest_island robots =
-  let robots = make_robot_matrix robots in
-  let islands = Matrix.make width height 0 in
-  Matrix.fold_pos
-    (fun acc pos v -> mark_islands robots islands acc pos v)
-    0 robots
-  |> ignore;
-  find_biggest_marked islands
+  find_components robots
+  |> CCGraph.Iter.map CCList.length
+  |> CCGraph.Iter.fold max 0
 
 let print_robots robots =
   make_robot_matrix robots
@@ -80,7 +70,7 @@ let part2 input =
     CCList.fold_left (fun acc line -> read_robots line :: acc) [] input
   in
   let result =
-    CCSeq.ints 0 |> CCSeq.take 10000
+    CCSeq.ints 0
     |> CCSeq.drop_while (fun steps ->
            5
            * (CCList.map (step_robot ~times:steps) robots |> find_biggest_island)
