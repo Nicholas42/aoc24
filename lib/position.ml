@@ -11,6 +11,21 @@ module type NumberType = sig
   val to_z : t -> Z.t
 end
 
+type direction = Left | Right | Up | Down
+
+let direction_of_char = function
+  | '<' -> Left
+  | '>' -> Right
+  | '^' -> Up
+  | 'v' -> Down
+  | _ -> failwith "not a direction"
+
+let char_of_direction = function
+  | Left -> '<'
+  | Right -> '>'
+  | Up -> '^'
+  | Down -> 'v'
+
 type 'a gen_position = { x : 'a; y : 'a }
 
 module type PositionInterface = sig
@@ -24,6 +39,7 @@ module type PositionInterface = sig
   val to_int : t -> int gen_position
   val to_z : t -> Z.t gen_position
   val from_pair : number_type * number_type -> t
+  val move : t -> direction -> t
   val orthogonal_neighbors : t -> t list
   val diagonal_neighbors : t -> t list
 
@@ -48,6 +64,12 @@ struct
   let to_float { x; y } = { x = N.to_float x; y = N.to_float y }
   let to_z { x; y } = { x = N.to_z x; y = N.to_z y }
   let from_pair (x, y) = { x; y }
+
+  let move { x; y } = function
+    | Left -> { x = x - N.one; y }
+    | Right -> { x = x + N.one; y }
+    | Up -> { x; y = y - N.one }
+    | Down -> { x; y = y + N.one }
 
   let orthogonal_neighbors { x; y } =
     [
