@@ -1,4 +1,4 @@
 (library
  (name aoc24)
- (libraries angstrom batteries containers containers-data zarith))
+ (libraries angstrom batteries containers containers-data zarith iter))
 

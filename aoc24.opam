@@ -15,6 +15,7 @@ depends: [
   "batteries"
   "containers"
   "containers-data"
+  "iter"
   "zarith"
   "odoc" {with-doc}
 ]

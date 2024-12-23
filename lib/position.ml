@@ -13,6 +13,8 @@ end
 
 type direction = Left | Right | Up | Down
 
+let rev_dir = function Left -> Right | Right -> Left | Up -> Down | Down -> Up
+
 let direction_of_char = function
   | '<' -> Left
   | '>' -> Right

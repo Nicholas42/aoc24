@@ -3,6 +3,7 @@ open Position
 module Matrix : sig
   type 'a t = 'a array array
 
+  val contains : 'a t -> position -> bool
   val get_opt : 'a t -> position -> 'a option
   val get_exn : 'a t -> position -> 'a
   val get_2d_opt : 'a t -> int -> int -> 'a option
@@ -11,10 +12,12 @@ module Matrix : sig
   val set_exn : 'a t -> position -> 'a -> unit
   val set_2d_safe : 'a t -> int -> int -> 'a -> bool
   val set_2d_exn : 'a t -> int -> int -> 'a -> unit
+  val update : 'a t -> ('a -> 'a) -> position -> unit
   val make : int -> int -> 'a -> 'a t
   val init : int -> int -> (int -> int -> 'a) -> 'a t
   val map : ('a -> 'b) -> 'a t -> 'b t
   val mapi : (int -> int -> 'a -> 'b) -> 'a t -> 'b t
+  val map_pos : (position -> 'a -> 'b) -> 'a t -> 'b t
   val height : 'a t -> int
   val width : 'a t -> int
   val from_input : string list -> char t
@@ -22,11 +25,15 @@ module Matrix : sig
   val count_pos : (position -> 'a -> bool) -> 'a t -> int
   val print : ('a -> unit) -> 'a t -> unit
   val fold_pos : ('b -> position -> 'a -> 'b) -> 'b -> 'a t -> 'b
+  val transpose : 'a t -> 'a t
 end = struct
   type 'a t = 'a array array
 
   let height mat = CCArray.length mat
   let width mat = if height mat = 0 then 0 else CCArray.length mat.(0)
+
+  let contains mat { x; y } =
+    0 <= x && x < width mat && 0 <= y && y < height mat
 
   let get_2d_opt mat x y =
     CCArray.get_safe mat y
@@ -38,19 +45,22 @@ end = struct
   let set_2d_exn mat x y v = mat.(y).(x) <- v
 
   let set_2d_safe mat x y v =
-    if 0 <= x && x < width mat && 0 <= y && y < height mat then (
+    if contains mat { x; y } then (
       set_2d_exn mat x y v;
       true)
     else false
 
   let set_exn mat { x; y } = set_2d_exn mat x y
   let set_safe mat { x; y } = set_2d_safe mat x y
+  let update mat f pos = set_exn mat pos (f @@ get_exn mat pos)
   let make width height v = CCArray.make_matrix height width v
   let init width height f = CCArray.init_matrix height width f
   let map f mat = CCArray.(map (fun row -> map f row) mat)
 
   let mapi f mat =
     CCArray.(mapi (fun y row -> mapi (fun x c -> f x y c) row)) mat
+
+  let map_pos f mat = mapi (fun x y c -> f { x; y } c) mat
 
   let from_input input =
     let height = CCList.length input in
@@ -86,4 +96,6 @@ end = struct
       (fun row_acc y row ->
         CCArray.foldi (fun acc x v -> f acc { x; y } v) row_acc row)
       init m
+
+  let transpose matrix = init (height matrix) (width matrix) (fun y x -> get_2d_exn matrix y x)
 end

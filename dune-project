@@ -17,7 +17,7 @@
  (name aoc24)
  (synopsis "Solving aoc24")
  (description "Learning ocaml by solving the Advent of Code 2024")
- (depends ocaml dune angstrom batteries containers containers-data zarith)
+ (depends ocaml dune angstrom batteries containers containers-data iter zarith)
  (tags
   (topics "advent of code")))
 

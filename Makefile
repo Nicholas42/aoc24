@@ -30,7 +30,6 @@ time: build
 $(time_targets): time_dec%: build
 	time $(MAKE) $(patsubst time_dec%,dec%,$@)
 
-
 .PHONY: build
 build:
 	$(DUNE) build
